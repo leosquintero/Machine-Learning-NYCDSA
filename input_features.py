@@ -1,9 +1,6 @@
-import toolz.functoolz as tz
 from tpot import TPOTClassifier
-import matplotlib.pyplot as plt
 import pandas as pd
 import math
-from pandas.plotting import scatter_matrix
 from sklearn.model_selection import train_test_split
 
 # from sklearn.preprocessing import Inputer
