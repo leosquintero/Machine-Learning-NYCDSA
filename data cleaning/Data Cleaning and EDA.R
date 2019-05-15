@@ -32,6 +32,8 @@ colnames(train)
 # Droping column ID
 train <- train[, -1]
 
+# transforming numerical columns that should be considered categorical
+train$MSSubClass = as.character(train$MSSubClass)
 
 #### Missing Data #### 
 
@@ -62,6 +64,10 @@ sum(is.na(train)) / (nrow(train) *ncol(train))
 # dummifying Categorical(Factor) columns 
 t <- dummyVars("~.", data = train, drop2nd = TRUE)
 train <- data.frame(predict(t, newdata = train))
+
+
+# reading file with cleaned data
+write.csv(train, file = "train_wrangled")
 
 
 #### EDA ####
