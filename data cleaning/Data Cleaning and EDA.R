@@ -10,7 +10,7 @@ library(caret)
 
 
 #uploading data sets
-train = read.csv("train.csv", stringsAsFactors = FALSE)
+train = read.csv("./Data/train.csv", stringsAsFactors = FALSE)
 
 #### wrangling and cleaning ####
 
@@ -66,11 +66,38 @@ t <- dummyVars("~.", data = train, drop2nd = TRUE)
 train <- data.frame(predict(t, newdata = train))
 
 
+# Running a preliminary multiple linear model to evaluate the relevance of all variables
+train.model<- lm(SalePrice ~ .,  data = train)
+summary(train.model)
+
+
+# Spliting the Data set into relevant and irrelevant sets.
+train_rel <- train %>% 
+    select(c("MSZoningC..all.", "MSZoningFV", "LotArea", "StreetGrvl", "LandContourLow", "LotConfigCulDSac", 
+             "LotConfigFR2", "LandSlopeGtl", "LandSlopeMod", "NeighborhoodEdwards", "NeighborhoodMitchel", 
+             "NeighborhoodNAmes", "NeighborhoodNoRidge", "NeighborhoodNridgHt", "NeighborhoodNWAmes", 
+             "NeighborhoodStoneBr", "Condition1RRAe", "Condition2PosN", "Condition2RRAe", "HouseStyle2Story",
+             "OverallQual", "OverallCond", "YearBuilt", "RoofStyleFlat", "RoofStyleGable", "RoofStyleGambrel",
+             "RoofStyleHip", "RoofStyleMansard", "RoofMatlClyTile", "RoofMatlCompShg", "RoofMatlRoll", "RoofMatlTar.Grv",
+             "RoofMatlWdShake", "Exterior1stBrkFace", "Exterior2ndImStucc", "MasVnrTypeBrkCmn", "MasVnrTypeBrkFace",
+             "MasVnrArea", "ExterQualEx", "FoundationBrkTil", "FoundationCBlock", "FoundationPConc", "FoundationStone",
+             "FoundationWood", "BsmtQualEx", "BsmtExposureAv", "BsmtExposureGd", "BsmtFinType1LwQ", "BsmtFinSF1", 
+             "BsmtFinSF2", "BsmtUnfSF", "SalePrice") )
+
+summary(lm(SalePrice ~ .,  data = train_rel))
+
+
 # reading file with cleaned data
-write.csv(train, file = "train_wrangled")
+write.csv(train, "train_wrangled")
+write.csv(train_rel, "train_relevant")
 
 
 #### EDA ####
+
+hist(train$SalePrice, probability = F)
+
+lines(density(train_rel$SalePrice), col = "red")
+
 
 # evaluate relevant variables and plot with and without outliers
 qplot(train$GrLivArea, train$SalePrice, main = "With Outliers")
@@ -85,8 +112,6 @@ qplot(train$GrLivArea, train$SalePrice, main = "Without Outliers")
 
 # Selecting relevant variables to subset
 
-train.model<- lm(SalePrice ~ .,  data = train)
-summary(train.model)
 
 
 
