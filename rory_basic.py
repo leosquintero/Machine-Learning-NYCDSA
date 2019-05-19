@@ -8,6 +8,8 @@ training_features, testing_features, training_target, testing_target = split_imp
     housing
 )
 
+training_features.corr().SalePrice
+
 model = linear_model.Ridge()
 
 model.fit(training_features, training_target)

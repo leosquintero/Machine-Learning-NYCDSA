@@ -1,7 +1,6 @@
 library(ggplot2)
 library(tidyverse)
 library(dummies)
-library(fastDummies)
 library(class)
 library(corrplot)
 library(caret)
@@ -35,7 +34,7 @@ train <- train[, -1]
 # transforming numerical columns that should be considered categorical
 train$MSSubClass = as.character(train$MSSubClass)
 
-#### Missing Data #### 
+#### Missing Data ####
 
 # Percentage of data missing in the data frame (0.05889565)
 sum(is.na(train)) / (nrow(train) *ncol(train))
@@ -49,7 +48,7 @@ for(i in 1:ncol(train)){
 }
 
 # Erasing columns with too many missing values
-train <- train[ , -which(names(train) %in% c("Alley","PoolQC", "Fence", 
+train <- train[ , -which(names(train) %in% c("Alley","PoolQC", "Fence",
                                              "MiscFeature", "FireplaceQu"))]
 
 # Deleting rows with remaining missing values
@@ -61,7 +60,7 @@ sum(is.na(train)) / (nrow(train) *ncol(train))
 
 #### Dummies ####
 
-# dummifying Categorical(Factor) columns 
+# dummifying Categorical(Factor) columns
 t <- dummyVars("~.", data = train, drop2nd = TRUE)
 train <- data.frame(predict(t, newdata = train))
 
@@ -72,16 +71,16 @@ summary(train.model)
 
 
 # Spliting the Data set into relevant and irrelevant sets.
-train_rel <- train %>% 
-    select(c("MSZoningC..all.", "MSZoningFV", "LotArea", "StreetGrvl", "LandContourLow", "LotConfigCulDSac", 
-             "LotConfigFR2", "LandSlopeGtl", "LandSlopeMod", "NeighborhoodEdwards", "NeighborhoodMitchel", 
-             "NeighborhoodNAmes", "NeighborhoodNoRidge", "NeighborhoodNridgHt", "NeighborhoodNWAmes", 
+train_rel <- train %>%
+    select(c("MSZoningC..all.", "MSZoningFV", "LotArea", "StreetGrvl", "LandContourLow", "LotConfigCulDSac",
+             "LotConfigFR2", "LandSlopeGtl", "LandSlopeMod", "NeighborhoodEdwards", "NeighborhoodMitchel",
+             "NeighborhoodNAmes", "NeighborhoodNoRidge", "NeighborhoodNridgHt", "NeighborhoodNWAmes",
              "NeighborhoodStoneBr", "Condition1RRAe", "Condition2PosN", "Condition2RRAe", "HouseStyle2Story",
              "OverallQual", "OverallCond", "YearBuilt", "RoofStyleFlat", "RoofStyleGable", "RoofStyleGambrel",
              "RoofStyleHip", "RoofStyleMansard", "RoofMatlClyTile", "RoofMatlCompShg", "RoofMatlRoll", "RoofMatlTar.Grv",
              "RoofMatlWdShake", "Exterior1stBrkFace", "Exterior2ndImStucc", "MasVnrTypeBrkCmn", "MasVnrTypeBrkFace",
              "MasVnrArea", "ExterQualEx", "FoundationBrkTil", "FoundationCBlock", "FoundationPConc", "FoundationStone",
-             "FoundationWood", "BsmtQualEx", "BsmtExposureAv", "BsmtExposureGd", "BsmtFinType1LwQ", "BsmtFinSF1", 
+             "FoundationWood", "BsmtQualEx", "BsmtExposureAv", "BsmtExposureGd", "BsmtFinType1LwQ", "BsmtFinSF1",
              "BsmtFinSF2", "BsmtUnfSF", "SalePrice") )
 
 summary(lm(SalePrice ~ .,  data = train_rel))
@@ -104,30 +103,10 @@ qplot(train$GrLivArea, train$SalePrice, main = "With Outliers")
 
 # Deleting outliers
 train <- train[-which(train$GrLivArea > 4000),]
- 
+
 #plot without outliers
 qplot(train$GrLivArea, train$SalePrice, main = "Without Outliers")
 
 
 
 # Selecting relevant variables to subset
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
