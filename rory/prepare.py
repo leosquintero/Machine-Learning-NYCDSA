@@ -28,7 +28,9 @@ def impute_dummify_and_split(
     numerical_X = X_all.select_dtypes(["number"])
 
     X_numerical_filled_knn = pd.DataFrame(
-        data=KNN(k=math.floor(df.shape[0] ** 0.5)).fit_transform(numerical_X),
+        data=KNN(
+            k=math.floor(df.shape[0] ** 0.5), verbose=False
+        ).fit_transform(numerical_X),
         columns=numerical_X.columns,
     )
 

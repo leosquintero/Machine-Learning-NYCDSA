@@ -8,8 +8,10 @@ results_data = reduce(
     [],
 )
 
+results_data
+
 results = pd.DataFrame(
     data=results_data, columns=["file", "model", "notes", "score"]
 )
-
-results.sort_values(by=["score"], ascending=False)
+results["ml_score"] = 1 - results.score
+results.sort_values(by=["ml_score"])

@@ -1,34 +1,41 @@
+import numpy as np
 import pandas as pd
 from sklearn import linear_model
 from rory.prepare import impute_dummify_and_split
 
 
 def main():
+    """ runs basic ridge and lasso regressions with varying alphas """
+
     housing = pd.read_csv("Data/train_original.csv")
 
     training_features, testing_features, training_target, testing_target = impute_dummify_and_split(
         housing
     )
 
-    # RIDGE
+    result = []
 
-    model = linear_model.Ridge()
+    # 2.1 alpha previously found to give best score
+    for alpha in np.append(10 ** np.linspace(-1, 2, num=10), [2.1]):
 
-    model.fit(training_features, training_target)
+        # RIDGE
+        model = linear_model.Ridge(alpha=alpha)
 
-    ridge_score = model.score(testing_features, testing_target)
-    # score = 0.880
+        model.fit(training_features, training_target)
 
-    # LASSO
+        ridge_score = model.score(testing_features, testing_target)
 
-    model = linear_model.Lasso(alpha=20)
+        # LASSO
 
-    model.fit(training_features, training_target)
+        model = linear_model.Lasso(alpha=alpha)
 
-    lasso_score = model.score(testing_features, testing_target)
-    # score = 0.8717402605376614
+        model.fit(training_features, training_target)
 
-    return [
-        ("_1_basic", "ridge", "", ridge_score),
-        ("_1_basic", "lasso", "", lasso_score),
-    ]
+        lasso_score = model.score(testing_features, testing_target)
+
+        result = result + [
+            ("_1_basic", "ridge", "alpha: {:.3f}".format(alpha), ridge_score),
+            ("_1_basic", "lasso", "alpha: {:.3f}".format(alpha), lasso_score),
+        ]
+
+    return sorted(result, key=lambda x: x[3], reverse=True)[:5]

@@ -114,8 +114,10 @@ def main():
             "SalePrice", axis="columns"
         )
 
-        for model in linear_model.Lasso(), linear_model.Ridge():
-
+        for model in (
+            linear_model.Lasso(alpha=2.1),
+            linear_model.Ridge(alpha=2.1),
+        ):
             model.fit(training_features_restricted, training_target)
 
             score = model.score(testing_featuress_restricted, testing_target)
@@ -124,7 +126,7 @@ def main():
                 (
                     "_3_engineer_features",
                     name,
-                    "p value limit: {:.3f}".format(p_value_limit),
+                    "p value limit: {:.3f}, alpha: 2.1".format(p_value_limit),
                     score,
                 )
             ]
