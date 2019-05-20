@@ -103,47 +103,24 @@ train_rel <- train %>%
 summary(lm(SalePrice ~ .,  data = train_rel))
 
 
-# reading file with cleaned data
-write.csv(train, "train_wrangled")
-write.csv(train_rel, "train_relevant")
-
-
 #### EDA ####
 
-hist(train$SalePrice, probability = F)
+hist(train_rel$SalePrice, probability = F)
 
 lines(density(train_rel$SalePrice), col = "red")
 
 
 # evaluate relevant variables and plot with and without outliers
-qplot(train_rel$GrLivArea, train_rel$SalePrice, main = "With Outliers")
+qplot(train$GrLivArea, train$SalePrice, main = "With Outliers")
 
 # Deleting outliers
-train_rel <- train_rel[-which(train_rel$GrLivArea > 4000),]
+train <- train[-which(train$GrLivArea > 4000),]
  
 #plot without outliers
-qplot(train_rel$GrLivArea, train_rel$SalePrice, main = "Without Outliers")
-
-
-pairs(train_rel)
-# Selecting relevant variables to subset
+qplot(train$GrLivArea, train$SalePrice, main = "Without Outliers")
 
 
 
-
-
-
-
-
-
-
-
-getOption("max.print", default = 1500)
-
-
-
-
-
-
-
-
+# reading file with cleaned data
+write.csv(train, "train_wrangled")
+write.csv(train_rel, "train_relevant")
