@@ -68,44 +68,48 @@ train <- data.frame(predict(t, newdata = train))
 
 # Running a preliminary multiple linear model to evaluate the relevance of all variables
 model<- lm(SalePrice ~ .,  data = train)
-summary(train.model)
+summary(model)
+
+
+#### Feature Selection ####
 
 #Selecting all variables with P value < 0.05
 tm <- tidy(model)
 
-# visualise dataframe of the model
-# (using non scientific notation of numbers)
+# visualise dataframe of the model (using non scientific notation of numbers)
 options(scipen = 999)
 train_rel <- tm$term[tm$p.value < 0.05]
 
 #obtaining a data frame with the column names that match the previous condition
-train_re <- train %>% 
+train_rel <- train %>% 
     select(train_rel)
 
 #adding Saleprice to new data set
-train_re["SalePrice"] <- train$SalePrice
+train_rel["SalePrice"] <- train$SalePrice
 
-summary(lm(SalePrice ~ .,  data = train_re))
+# running a nwe lm including only features with p-value smaller than 0.05
+summary(lm(SalePrice ~ .,  data = train_rel))
 
 
-#### EDA ####
+#### Data Visualization ####
 
 hist(train_rel$SalePrice, probability = F)
 
-lines(density0(train_rel$SalePrice), col = "red")
-
-
 # evaluate relevant variables and plot with and without outliers
-qplot(train$GrLivArea, train$SalePrice, main = "With Outliers")
+qplot(train_rel$LotArea, train_rel$SalePrice, main = "With Outliers")
 
 # Deleting outliers
-train <- train[-which(train$GrLivArea > 4000),]
+train_rel <- train_rel[-which(train_rel$LotArea > 30000),]
  
 #plot without outliers
-qplot(train$GrLivArea, train$SalePrice, main = "Without Outliers")
+qplot(train_rel$LotArea, train_rel$SalePrice, main = "Without Outliers")
+
+
+ggplot(train_rel, aes(SalePrice))+
+    geom_area(stat = "bin")
 
 
 
-# reading file with cleaned data
+# writing file with cleaned dummified data
 write.csv(train, "train_wrangled")
 write.csv(train_rel, "train_relevant")
