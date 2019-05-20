@@ -111,5 +111,5 @@ ggplot(train_rel, aes(SalePrice))+
 
 
 # writing file with cleaned dummified data
-write.csv(train, "train_wrangled")
-write.csv(train_rel, "train_relevant")
+write.csv(train, "train_wrangled", row.names=FALSE)
+write.csv(train_rel, "train_relevant", row.names=FALSE )
