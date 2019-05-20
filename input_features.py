@@ -2,8 +2,6 @@ from tpot import TPOTClassifier
 import pandas as pd
 import math
 from sklearn.model_selection import train_test_split
-
-# from sklearn.preprocessing import Inputer
 from fancyimpute import KNN
 
 
@@ -110,12 +108,21 @@ all_features = [
 
 input_features = [f[0] for f in all_features if f[2]]
 
+housing = pd.read_csv("Data/train.csv")
 
-def split_impute_and_dummify(df, target_variable="SalePrice"):
+
+def split_impute_and_dummify(
+    df, target_variable="SalePrice", drop_target=True
+):
     df = df[input_features]
     df = df[df[target_variable].notnull()]
 
-    X_all = df.drop(target_variable, axis="columns")
+    # X_all = df.drop(target_variable, axis="columns")
+    if drop_target:
+        X_all = df.drop(target_variable, axis="columns")
+    else:
+        X_all = df
+
     y = df[target_variable]
 
     non_numerical = X_all.select_dtypes(["object"])
@@ -124,9 +131,7 @@ def split_impute_and_dummify(df, target_variable="SalePrice"):
     numerical_X = X_all.select_dtypes(["number"])
 
     X_numerical_filled_knn = pd.DataFrame(
-        data=KNN(k=math.floor(housing.count().Id ** 0.5)).fit_transform(
-            numerical_X
-        ),
+        data=KNN(k=math.floor(df.shape[0] ** 0.5)).fit_transform(numerical_X),
         columns=numerical_X.columns,
     )
 
@@ -137,16 +142,16 @@ def split_impute_and_dummify(df, target_variable="SalePrice"):
     return train_test_split(X, y, random_state=42)
 
 
-housing = pd.read_csv("Data/train.csv")
+def main() -> None:
 
-X_train, X_test, y_train, y_test = split_impute_and_dummify(housing)
+    X_train, X_test, y_train, y_test = split_impute_and_dummify(housing)
 
-pipeline_optimizer = TPOTClassifier(
-    generations=4, population_size=16, cv=5, random_state=42, verbosity=2
-)
+    pipeline_optimizer = TPOTClassifier(
+        generations=4, population_size=16, cv=5, random_state=42, verbosity=2
+    )
 
-pipeline_optimizer.fit(X_train, y_train)
+    pipeline_optimizer.fit(X_train, y_train)
 
-pipeline_optimizer.score(X_test, y_test)
+    pipeline_optimizer.score(X_test, y_test)
 
-pipeline_optimizer.export("tpot_housing_pipeline_full.py")
+    pipeline_optimizer.export("tpot_housing_pipeline_full.py")

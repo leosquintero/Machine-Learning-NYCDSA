@@ -1,7 +1,6 @@
 library(ggplot2)
 library(tidyverse)
 library(dummies)
-library(fastDummies)
 library(class)
 library(corrplot)
 library(caret)
@@ -34,8 +33,6 @@ train <- train[, -1]
 
 # transforming numerical columns that should be considered categorical
 train$MSSubClass = as.character(train$MSSubClass)
-train$YrSold = as.character(train$YrSold)
-train$MoSold = as.character(train$MoSold)
 train$YearRemodAdd = as.character(train$YearRemodAdd)
 #### Missing Data #### 
 
@@ -51,7 +48,7 @@ for(i in 1:ncol(train)){
 }
 
 # Erasing columns with too many missing values
-train <- train[ , -which(names(train) %in% c("Alley","PoolQC", "Fence", 
+train <- train[ , -which(names(train) %in% c("Alley","PoolQC", "Fence",
                                              "MiscFeature", "FireplaceQu"))]
 
 # Deleting rows with remaining missing values
@@ -63,7 +60,7 @@ sum(is.na(train)) / (nrow(train) *ncol(train))
 
 #### Dummies ####
 
-# dummifying Categorical(Factor) columns 
+# dummifying Categorical(Factor) columns
 t <- dummyVars("~.", data = train, drop2nd = TRUE)
 train <- data.frame(predict(t, newdata = train))
 
