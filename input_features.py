@@ -2,8 +2,6 @@ from tpot import TPOTClassifier
 import pandas as pd
 import math
 from sklearn.model_selection import train_test_split
-
-# from sklearn.preprocessing import Inputer
 from fancyimpute import KNN
 
 
@@ -113,11 +111,18 @@ input_features = [f[0] for f in all_features if f[2]]
 housing = pd.read_csv("Data/train.csv")
 
 
-def split_impute_and_dummify(df, target_variable="SalePrice"):
+def split_impute_and_dummify(
+    df, target_variable="SalePrice", drop_target=True
+):
     df = df[input_features]
     df = df[df[target_variable].notnull()]
 
-    X_all = df.drop(target_variable, axis="columns")
+    # X_all = df.drop(target_variable, axis="columns")
+    if drop_target:
+        X_all = df.drop(target_variable, axis="columns")
+    else:
+        X_all = df
+
     y = df[target_variable]
 
     non_numerical = X_all.select_dtypes(["object"])
