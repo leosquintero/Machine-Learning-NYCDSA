@@ -5,6 +5,7 @@ import pandas as pd
 
 
 def main():
+    """ only uses features with a correlation p value above a certain limit """
     housing = pd.read_csv("Data/train_original.csv")
 
     training_features, testing_features, training_target, testing_target = impute_dummify_and_split(
@@ -28,7 +29,7 @@ def main():
             "SalePrice", axis="columns"
         )
 
-        testing_featuress_restricted = testing_features[columns].drop(
+        testing_features_restricted = testing_features[columns].drop(
             "SalePrice", axis="columns"
         )
 
@@ -39,7 +40,14 @@ def main():
 
             model.fit(training_features_restricted, training_target)
 
-            score = model.score(testing_featuress_restricted, testing_target)
+            train_score = model.score(
+                training_features_restricted, training_target
+            )
+
+            test_score = model.score(
+                testing_features_restricted, testing_target
+            )
+
             name = str(model).split("(")[0]
 
             result = result + [
@@ -47,22 +55,9 @@ def main():
                     "_2_restrict_features",
                     name,
                     "p value limit: {:.3f}, alpha: 2.1".format(p_value_limit),
-                    score,
+                    train_score,
+                    test_score,
                 )
             ]
 
     return result
-
-
-# p value limit: 0.001, model: Lasso, score: 0.877
-# p value limit: 0.001, model: Ridge, score: 0.877
-# p value limit: 0.010, model: Lasso, score: 0.875
-# p value limit: 0.010, model: Ridge, score: 0.876
-# p value limit: 0.100, model: Lasso, score: 0.885
-# p value limit: 0.100, model: Ridge, score: 0.883
-# p value limit: 0.500, model: Lasso, score: 0.879
-# p value limit: 0.500, model: Ridge, score: 0.882
-
-# Conclusion
-# not much difference from basic but restricting features would be
-# significantly faster on larger data sets

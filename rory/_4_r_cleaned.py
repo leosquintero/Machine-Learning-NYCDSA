@@ -1,21 +1,18 @@
 import numpy as np
 import pandas as pd
 from sklearn import linear_model
-from rory.prepare import impute_dummify_and_split
-
-
-housing = pd.read_csv("Data/train_original.csv")
-housing.isna().sum()[housing.isna().sum() > 0]
-housing.shape
+from sklearn.model_selection import train_test_split
 
 
 def main():
-    """ runs basic ridge and lasso regressions with varying alphas """
+    """ runs Ridge and Lasso r cleaned code """
 
-    housing = pd.read_csv("Data/train_original.csv")
+    housing = pd.read_csv("Data/train_relevant", header=0)
 
-    training_features, testing_features, training_target, testing_target = impute_dummify_and_split(
-        housing
+    y = housing["SalePrice"]
+
+    training_features, testing_features, training_target, testing_target = train_test_split(
+        housing.drop("SalePrice", axis="columns"), y, random_state=42
     )
 
     result = []
@@ -42,14 +39,14 @@ def main():
 
         result = result + [
             (
-                "_1_basic",
+                "_4_r_cleaned",
                 "Ridge",
                 "alpha: {:.3f}".format(alpha),
                 ridge_score_train,
                 ridge_score_test,
             ),
             (
-                "_1_basic",
+                "_4_r_cleaned",
                 "Lasso",
                 "alpha: {:.3f}".format(alpha),
                 lasso_score_train,
