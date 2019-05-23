@@ -5,6 +5,8 @@ library(class)
 library(corrplot)
 library(caret)
 library(broom)
+library(purrr)
+library(ggplot2)
 
 #####Data Cleaning#####
 
@@ -59,6 +61,9 @@ train <- train[complete.cases(train), ]
 sum(is.na(train)) / (nrow(train) *ncol(train))
 
 
+
+
+
 #### Dummies ####
 
 # dummifying Categorical(Factor) columns
@@ -69,6 +74,9 @@ train <- data.frame(predict(t, newdata = train))
 # Running a preliminary multiple linear model to evaluate the relevance of all variables
 model<- lm(SalePrice ~ .,  data = train)
 summary(model)
+
+
+
 
 
 #### Feature Selection ####
@@ -91,25 +99,48 @@ train_rel["SalePrice"] <- train$SalePrice
 summary(lm(SalePrice ~ .,  data = train_rel))
 
 
+
+
 #### Data Visualization ####
 
+# visualizing lineal model
+model1 <- lm(SalePrice ~ .,  data = train_rel)
+plot(model1)
+
+# drawing a historgram of SalePrice
 hist(train_rel$SalePrice, probability = F)
 
 # evaluate relevant variables and plot with and without outliers
-qplot(train_rel$LotArea, train_rel$SalePrice, main = "With Outliers")
+qplot(train_rel$LotArea, train_rel$SalePrice, main = "With Outliers",xlab = "Lot Area", ylab = "Sale Price")
 
 # Deleting outliers
 train_rel <- train_rel[-which(train_rel$LotArea > 30000),]
- 
+
 #plot without outliers
-qplot(train_rel$LotArea, train_rel$SalePrice, main = "Without Outliers")
+qplot(train_rel$LotArea, train_rel$SalePrice, main = "Without Outliers",xlab = "Lot Area", ylab = "Sale Price")
 
 
-ggplot(train_rel, aes(SalePrice))+
-    geom_area(stat = "bin")
+# Evaluating the distribution 
+ggplot(train_rel, aes(x = SalePrice, fill = ..count..)) +
+    geom_histogram(binwidth = 5000) +
+    ggtitle("Figure 1 Histogram of SalePrice") +
+    ylab("Count of houses") +
+    xlab("Housing Price") + 
+    theme(plot.title = element_text(hjust = 0.5))
+
+#log term of SalePrice sinse the data is skewed to the left
+train_rel$SalePrice <- log(train_rel$SalePrice)
+
+# re evaluating the distribution
+ggplot(train_rel, aes(x = SalePrice, fill = ..count..)) +
+    geom_histogram(binwidth = 0.05) +
+    ggtitle("Figure 2 Histogram of log SalePrice") +
+    ylab("Count of houses") +
+    xlab("Housing Price") + 
+    theme(plot.title = element_text(hjust = 0.5))
+
 
 
 
 # writing file with cleaned dummified data
-write.csv(train, "train_wrangled", row.names=FALSE)
 write.csv(train_rel, "train_relevant", row.names=FALSE )
