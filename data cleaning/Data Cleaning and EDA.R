@@ -8,6 +8,7 @@ library(broom)
 library(purrr)
 library(ggplot2)
 
+
 #####Data Cleaning#####
 
 
@@ -131,13 +132,36 @@ ggplot(train_rel, aes(x = SalePrice, fill = ..count..)) +
 #log term of SalePrice sinse the data is skewed to the left
 train_rel$SalePrice <- log(train_rel$SalePrice)
 
-# re evaluating the distribution
+# re-evaluating the distribution
 ggplot(train_rel, aes(x = SalePrice, fill = ..count..)) +
     geom_histogram(binwidth = 0.05) +
     ggtitle("Figure 2 Histogram of log SalePrice") +
     ylab("Count of houses") +
     xlab("Housing Price") + 
     theme(plot.title = element_text(hjust = 0.5))
+
+# Plotting Sale price compared to lotArea
+plot_1 <- ggplot(train_rel, aes(x= SalePrice, y = LotArea)) +
+    geom_point()+
+    geom_smooth(method=lm , color="blue", se=FALSE) +
+    ggtitle("Scatterplot of Sale Price vs Lot Area") +
+    theme(plot.title = element_text(hjust = 0.4))
+
+
+# Plotting Sale price compared to lotArea
+plot_2 <- ggplot(train_rel, aes(x= SalePrice, y = YearBuilt)) +
+    geom_point()+
+    geom_smooth(method=lm , color="blue", se=FALSE) +
+    ggtitle("Scatterplot of Sale Price vs Lot Area") +
+    theme(plot.title = element_text(hjust = 0.4))
+
+
+# Plotting Sale price compared to lotArea
+plot_3 <- ggplot(train_rel, aes(x= SalePrice, y = WoodDeckSF)) +
+    geom_point()+
+    geom_smooth(method=lm , color="blue", se=FALSE) +
+    ggtitle("Scatterplot of Sale Price vs Lot Area") +
+    theme(plot.title = element_text(hjust = 0.4))
 
 
 
