@@ -72,9 +72,7 @@ t <- dummyVars("~.", data = train, drop2nd = TRUE)
 train <- data.frame(predict(t, newdata = train))
 
 
-# Running a preliminary multiple linear model to evaluate the relevance of all variables
-model<- lm(SalePrice ~ .,  data = train)
-summary(model)
+
 
 
 
@@ -82,12 +80,21 @@ summary(model)
 
 #### Feature Selection ####
 
+#creating new feature adding the total area of the house
+train <- train %>% 
+    mutate(TotalSF = TotalBsmtSF + X1stFlrSF + X2ndFlrSF, 
+                TotalBsmtSF = NULL, X1stFlrSF = NULL, X2ndFlrSF = NULL)
+
+
+# Running a preliminar multiple linear model to evaluate the relevance of all variables
+model<- lm(SalePrice ~ .,  data = train)
+summary(model)
+
 #Selecting all variables with P value < 0.05
 tm <- tidy(model)
-
 # visualise dataframe of the model (using non scientific notation of numbers)
 options(scipen = 999)
-train_rel <- tm$term[tm$p.value < 0.05]
+train_rel <- tm$term[tm$p.value < 0.04]
 
 #obtaining a data frame with the column names that match the previous condition
 train_rel <- train %>% 
