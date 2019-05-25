@@ -13,7 +13,7 @@ library(ggplot2)
 
 
 #uploading data sets
-train = read.csv("./Data/train.csv", stringsAsFactors = FALSE)
+train = read.csv("train.csv", stringsAsFactors = FALSE)
 
 #### wrangling and cleaning ####
 
@@ -85,16 +85,18 @@ train <- train %>%
     mutate(TotalSF = TotalBsmtSF + X1stFlrSF + X2ndFlrSF, 
                 TotalBsmtSF = NULL, X1stFlrSF = NULL, X2ndFlrSF = NULL)
 
+train <- train[ , -which(names(train) %in% c("BsmtFinSF1","BsmtFinSF2", "BsmtUnfSF"))]
+
 
 # Running a preliminar multiple linear model to evaluate the relevance of all variables
 model<- lm(SalePrice ~ .,  data = train)
 summary(model)
 
-#Selecting all variables with P value < 0.05
+#Selecting all variables with P value < 0.04
 tm <- tidy(model)
 # visualise dataframe of the model (using non scientific notation of numbers)
 options(scipen = 999)
-train_rel <- tm$term[tm$p.value < 0.04]
+train_rel <- tm$term[tm$p.value < 0.05]
 
 #obtaining a data frame with the column names that match the previous condition
 train_rel <- train %>% 
@@ -170,8 +172,14 @@ plot_3 <- ggplot(train_rel, aes(x= SalePrice, y = WoodDeckSF)) +
     ggtitle("Scatterplot of Sale Price vs Lot Area") +
     theme(plot.title = element_text(hjust = 0.4))
 
+plot_4 <- ggplot(train_rel, aes(x= SalePrice, y = TotalSF)) +
+    geom_point()+
+    geom_smooth(method=lm , color="blue", se=FALSE) +
+    ggtitle("Scatterplot of Sale Price vs Lot Area") +
+    theme(plot.title = element_text(hjust = 0.4))
 
-
+library(gridExtra)
+grid.arrange(plot_1, plot_2,plot_3,plot_4)
 
 # writing file with cleaned dummified data
 write.csv(train_rel, "train_relevant", row.names=FALSE )
