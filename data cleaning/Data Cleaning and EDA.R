@@ -8,6 +8,7 @@ library(broom)
 library(purrr)
 library(ggplot2)
 library(gridExtra)
+library(corrplot)
 
 #####Data Cleaning#####
 
@@ -113,8 +114,10 @@ summary(lm(SalePrice ~ .,  data = train_rel))
 model1 <- lm(SalePrice ~ .,  data = train_rel)
 plot(model1)
 
+
 # drawing a historgram of SalePrice
-hist(train_rel$SalePrice, probability = F)
+hist(train_rel$SalePrice, probability = F, breaks = 50, main = "Sale price hist",
+     xlab = "sale Price", col = "skyblue")
 
 # evaluate relevant variables and plot with and without outliers
 qplot(train_rel$LotArea, train_rel$SalePrice, main = "With Outliers",xlab = "Lot Area", ylab = "Sale Price")
@@ -189,7 +192,13 @@ plot_6 <- ggplot(train_rel, aes(x= SalePrice, y = MasVnrArea)) +
     ggtitle("Scatterplot of Sale Price vs Masonry veneer area in square feet") +
     theme(plot.title = element_text(hjust = 0.4))
 
-grid.arrange(plot_1, plot_2,plot_3,plot_4, plot_5, plot_6)
+grid.arrange(plot_1, plot_2,plot_3,plot_4)
+grid.arrange(plot_3,plot_4, plot_5,plot_6)
+
+# Showing the corelation between some numeric variables
+c1 <- train %>% select("GarageYrBlt","LotArea", "YearBuilt", "WoodDeckSF", "TotalSF",
+                       "GrLivArea", "MasVnrArea",'OverallQual','OverallCond','YearBuilt')
+corrplot(cor(c1), method = 'number', tl.col = "blue" )
 
 # writing file with cleaned dummified data
 write.csv(train_rel, "train_relevant", row.names=FALSE )
