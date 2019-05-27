@@ -9,18 +9,19 @@ library(purrr)
 library(ggplot2)
 library(gridExtra)
 library(corrplot)
+library(naniar)
 
-#####Data Cleaning#####
 
 
 #uploading data sets
 train = read.csv("train.csv", stringsAsFactors = FALSE)
 
-#### wrangling and cleaning ####
+
+#### Data cleaning ####
 
 # Taking a look at the head
-head(train)
 
+head(train)
 
 # taking a look at the dimentions
 dim(train)
@@ -36,16 +37,37 @@ colnames(train)
 # Droping column ID
 train <- train[, -1]
 
+# finding how many Numerical variables there are in the data set
+x <- dplyr::select_if(train, is.numeric)
+
 # transforming numerical columns that should be considered categorical
 train$MSSubClass = as.character(train$MSSubClass)
 train$YearRemodAdd = as.character(train$YearRemodAdd)
+
+# Generating a plot with all numerical values
+x %>% 
+    keep(is.numeric) %>% 
+    gather() %>% 
+    ggplot(aes(value))+
+    facet_wrap(~ key, scales = "free")+
+    geom_histogram()
+
+
+
 #### Missing Data #### 
 
+# counting missing values
+sum(is.na(train))
+
 # Percentage of data missing in the data frame (0.05889565)
+
 sum(is.na(train)) / (nrow(train) *ncol(train))
 
 # counting missing values per column
 data.frame(sapply(train, function(y) sum(length(which(is.na(y))))))
+
+# plotting missing data and finding patterns
+gg_miss_upset(train)
 
 # Imputing missing data with the mean of each numerical column
 for(i in 1:ncol(train)){
@@ -62,17 +84,14 @@ train <- train[complete.cases(train), ]
 # Counting missing values again
 sum(is.na(train)) / (nrow(train) *ncol(train))
 
-
-
-
+#New dimensions 
+dim(train)
 
 #### Dummies ####
 
 # dummifying Categorical(Factor) columns
 t <- dummyVars("~.", data = train, drop2nd = TRUE)
 train <- data.frame(predict(t, newdata = train))
-
-
 
 
 #### Feature Selection ####
@@ -85,25 +104,36 @@ train <- train %>%
 train <- train[ , -which(names(train) %in% c("BsmtFinSF1","BsmtFinSF2", "BsmtUnfSF"))]
 
 
-# Running a preliminar multiple linear model to evaluate the relevance of all variables
+
+# Running a preliminar multiple linear model 
+# to evaluate the relevance of all variables
 model<- lm(SalePrice ~ .,  data = train)
 summary(model)
 
 #Selecting all variables with P value < 0.04
 tm <- tidy(model)
-# visualise dataframe of the model (using non scientific notation of numbers)
+# visualise dataframe of the model 
+# (using non scientific notation of numbers)
 options(scipen = 999)
 train_rel <- tm$term[tm$p.value < 0.05]
 
-#obtaining a data frame with the column names that match the previous condition
+
+#obtaining a data frame with the column names 
+# that match the previous condition
 train_rel <- train %>% 
     select(train_rel)
 
 #adding Saleprice to new data set
 train_rel["SalePrice"] <- train$SalePrice
 
-# running a nwe lm including only features with p-value smaller than 0.05
+# running a nwe lm including only features 
+# with p-value smaller than 0.05
 summary(lm(SalePrice ~ .,  data = train_rel))
+
+options(scipen = 999)
+tm %>% arrange(tm$p.value)
+
+# Top p values ####
 
 
 
@@ -199,6 +229,14 @@ grid.arrange(plot_3,plot_4, plot_5,plot_6)
 c1 <- train %>% select("GarageYrBlt","LotArea", "YearBuilt", "WoodDeckSF", "TotalSF",
                        "GrLivArea", "MasVnrArea",'OverallQual','OverallCond','YearBuilt')
 corrplot(cor(c1), method = 'number', tl.col = "blue" )
+
+c2 <- train %>%  select("RoofMatlClyTile", "Condition2PosN", "OverallCond", "BsmtExposureGd", 
+                     "LotArea", "GrLivArea", "OverallQual", "KitchenQualEx", "LandSlopeMod",
+                     "PoolArea", "SalePrice")
+corrplot(cor(c2), method = "number")
+
+print(cor(c2))
+
 
 # writing file with cleaned dummified data
 write.csv(train_rel, "train_relevant", row.names=FALSE )
