@@ -84,7 +84,7 @@ train <- train[, -which(names(train) %in% c(
 nrow(train)
 # Deleting rows with remaining missing values
 # train_complete <- train[complete.cases(train), ]
-nrow(train_complete)
+# nrow(train_complete)
 
 # Counting missing values again
 sum(is.na(train)) / (nrow(train) * ncol(train))
@@ -162,7 +162,7 @@ hist(train_rel$SalePrice, probability = F, breaks = 50, main = "Sale price hist"
 qplot(train_rel$LotArea, train_rel$SalePrice, main = "With Outliers",xlab = "Lot Area", ylab = "Sale Price")
 
 # Deleting outliers
-train_rel <- train_rel[-which(train_rel$LotArea > 30000),]
+# train_rel <- train_rel[-which(train_rel$LotArea > 30000),]
 
 #plot without outliers
 qplot(train_rel$LotArea, train_rel$SalePrice, main = "Without Outliers",xlab = "Lot Area", ylab = "Sale Price")
