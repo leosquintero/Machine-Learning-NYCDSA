@@ -7,7 +7,9 @@ import pandas as pd
 def main():
     """ only uses features with a correlation p value above a certain limit """
     housing = pd.read_csv("Data/train_original.csv")
-
+    housing["TotalSF"] = (
+        housing["TotalBsmtSF"] + housing["1stFlrSF"] + housing["2ndFlrSF"]
+    )
     training_features, testing_features, training_target, testing_target = impute_dummify_and_split(
         housing, drop_target=False
     )
@@ -17,11 +19,18 @@ def main():
         for c in training_features.columns
     ]
 
-    p_value_limits = [0.001, 0.01, 0.1, 0.5]
+    p_value_limits = [0.05]
 
     result = []
+    ps_and_cols = {}
 
     for p_value_limit in p_value_limits:
+
+        high_ps = list(
+            map(lambda t: t[0], sorted(p_values, key=lambda t1: t1[1])[:15])
+        )
+
+        print(training_features[high_ps].corr())
 
         columns = [p[0] for p in p_values if p[1] < p_value_limit]
 
@@ -60,4 +69,8 @@ def main():
                 )
             ]
 
-    return result
+    print(ps_and_cols)
+    return training_features[high_ps].corr()
+
+
+main()

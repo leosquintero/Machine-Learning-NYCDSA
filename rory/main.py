@@ -23,4 +23,6 @@ results = pd.DataFrame(
 results["ml_train_score"] = 1 - results.train_score
 results["ml_test_score"] = 1 - results.test_score
 
-results.sort_values(by=["ml_test_score"])
+results.sort_values(by=["ml_test_score"])[:10].drop(
+    ["ml_train_score", "ml_test_score"], axis="columns"
+)

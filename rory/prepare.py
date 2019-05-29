@@ -4,11 +4,11 @@ from sklearn.model_selection import train_test_split
 from fancyimpute import KNN
 from sklearn.preprocessing import Imputer
 
-
-imputer = Imputer(missing_values="NaN", strategy="mean", axis=0)
-
-imputer = imputer.fit(X[:, 1:3])
-X[:, 1:3] = imputer.transform(X[:, 1:3])
+#
+# imputer = Imputer(missing_values="NaN", strategy="mean", axis=0)
+#
+# imputer = imputer.fit(X[:, 1:3])
+# X[:, 1:3] = imputer.transform(X[:, 1:3])
 
 
 def impute_dummify_and_split(
