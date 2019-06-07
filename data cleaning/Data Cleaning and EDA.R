@@ -139,7 +139,7 @@ train_rel["SalePrice"] <- train$SalePrice
 # running a nwe lm including only features with p-value smaller than 0.05
 summary(lm(SalePrice ~ ., data = train_rel))
 
-options(scipen = 999)
+
 tm %>% arrange(tm$p.value)
 
 # Top p values ####
