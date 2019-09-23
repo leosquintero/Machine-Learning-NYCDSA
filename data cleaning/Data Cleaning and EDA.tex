@@ -1,0 +1,611 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+
+\makeatother
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+\title{\title{\title{\title{\title{}}}}}
+
+
+
+\maketitle
+The results below are generated from an R script.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{library}\hlstd{(tidyverse)}
+\hlkwd{library}\hlstd{(dummies)}
+\hlkwd{library}\hlstd{(class)}
+\hlkwd{library}\hlstd{(corrplot)}
+\hlkwd{library}\hlstd{(caret)}
+\hlkwd{library}\hlstd{(broom)}
+\hlkwd{library}\hlstd{(purrr)}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{library}\hlstd{(gridExtra)}
+\hlkwd{library}\hlstd{(corrplot)}
+\hlkwd{library}\hlstd{(naniar)}
+
+
+\hlcom{##### Data Cleaning#####}
+
+
+\hlcom{# uploading data sets}
+\hlstd{train} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"./Data/train.csv"}\hlstd{,} \hlkwc{stringsAsFactors} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in file(file, "{}rt"{}): cannot open file './Data/train.csv': No such file or directory}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in file(file, "{}rt"{}): cannot open the connection}}\begin{alltt}
+\hlstd{train_original} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"./Data/train.csv"}\hlstd{,} \hlkwc{stringsAsFactors} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in file(file, "{}rt"{}): cannot open file './Data/train.csv': No such file or directory}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in file(file, "{}rt"{}): cannot open the connection}}\begin{alltt}
+\hlcom{#### wrangling and cleaning ####}
+
+\hlcom{# Taking a look at the head}
+
+\hlkwd{head}\hlstd{(train)}
+\end{alltt}
+\begin{verbatim}
+##                         
+## 1 function (x, ...)     
+## 2 {                     
+## 3     UseMethod("train")
+## 4 }
+\end{verbatim}
+\begin{alltt}
+\hlcom{# taking a look at the dimentions}
+\hlkwd{dim}\hlstd{(train)}
+\end{alltt}
+\begin{verbatim}
+## NULL
+\end{verbatim}
+\begin{alltt}
+\hlcom{# taking a look at the structure}
+\hlkwd{str}\hlstd{(train)}
+\end{alltt}
+\begin{verbatim}
+## function (x, ...)
+\end{verbatim}
+\begin{alltt}
+\hlcom{# taking a look at the summary}
+\hlkwd{summary}\hlstd{(train)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in object[[i]]: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlkwd{colnames}\hlstd{(train)}
+\end{alltt}
+\begin{verbatim}
+## NULL
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Droping column ID}
+\hlstd{train} \hlkwb{<-} \hlstd{train[,} \hlopt{-}\hlnum{1}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train[, -1]: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlcom{# finding how many Numerical variables there are in the data set}
+\hlstd{x} \hlkwb{<-} \hlstd{dplyr}\hlopt{::}\hlkwd{select_if}\hlstd{(train, is.numeric)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in UseMethod("{}tbl\_vars"{}): no applicable method for 'tbl\_vars' applied to an object of class "{}function"{}}}\begin{alltt}
+\hlcom{# transforming numerical columns that should be considered categorical}
+\hlstd{train}\hlopt{$}\hlstd{MSSubClass} \hlkwb{=} \hlkwd{as.character}\hlstd{(train}\hlopt{$}\hlstd{MSSubClass)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train\$MSSubClass: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlstd{train}\hlopt{$}\hlstd{YearRemodAdd} \hlkwb{=} \hlkwd{as.character}\hlstd{(train}\hlopt{$}\hlstd{YearRemodAdd)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train\$YearRemodAdd: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlcom{# Generating a plot with all numerical values}
+\hlstd{x} \hlopt{%>%}
+    \hlkwd{keep}\hlstd{(is.numeric)} \hlopt{%>%}
+    \hlkwd{gather}\hlstd{()} \hlopt{%>%}
+    \hlkwd{ggplot}\hlstd{(}\hlkwd{aes}\hlstd{(value))}\hlopt{+}
+    \hlkwd{facet_wrap}\hlstd{(}\hlopt{~} \hlstd{key,} \hlkwc{scales} \hlstd{=} \hlstr{"free"}\hlstd{)}\hlopt{+}
+    \hlkwd{geom_histogram}\hlstd{()}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(lhs, parent, parent): object 'x' not found}}\begin{alltt}
+\hlcom{#### Missing Data ####}
+
+\hlcom{# counting missing values}
+\hlkwd{sum}\hlstd{(}\hlkwd{is.na}\hlstd{(train))}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(train): is.na() applied to non-(list or vector) of type 'closure'}}\begin{verbatim}
+## [1] 0
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Percentage of data missing in the data frame (0.05889565)}
+\hlkwd{sum}\hlstd{(}\hlkwd{is.na}\hlstd{(train))} \hlopt{/} \hlstd{(}\hlkwd{nrow}\hlstd{(train)} \hlopt{*} \hlkwd{ncol}\hlstd{(train))}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(train): is.na() applied to non-(list or vector) of type 'closure'}}\begin{verbatim}
+## numeric(0)
+\end{verbatim}
+\begin{alltt}
+\hlcom{# counting missing values per column}
+\hlkwd{data.frame}\hlstd{(}\hlkwd{sapply}\hlstd{(train,} \hlkwa{function}\hlstd{(}\hlkwc{y}\hlstd{)} \hlkwd{sum}\hlstd{(}\hlkwd{length}\hlstd{(}\hlkwd{which}\hlstd{(}\hlkwd{is.na}\hlstd{(y))))))}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(y): is.na() applied to non-(list or vector) of type 'symbol'}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(y): is.na() applied to non-(list or vector) of type 'symbol'}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(y): is.na() applied to non-(list or vector) of type 'language'}}\begin{verbatim}
+##     sapply.train..function.y..sum.length.which.is.na.y.....
+## x                                                         0
+## ...                                                       0
+##                                                           0
+\end{verbatim}
+\begin{alltt}
+\hlkwd{sum}\hlstd{(train}\hlopt{$}\hlstd{Sal)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train\$Sal: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlcom{# plotting missing data and finding patterns}
+\hlkwd{gg_miss_upset}\hlstd{(train)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(data): is.na() applied to non-(list or vector) of type 'closure'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in colSums(is.na(data)): 'x' must be an array of at least two dimensions}}\begin{alltt}
+\hlcom{# Imputing missing data with the mean of each numerical column}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{ncol}\hlstd{(train)) \{}
+  \hlstd{train[}\hlkwd{is.na}\hlstd{(train[, i]), i]} \hlkwb{<-} \hlkwd{mean}\hlstd{(train[, i],} \hlkwc{na.rm} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in 1:ncol(train): argument of length 0}}\begin{alltt}
+\hlcom{# Erasing columns with too many missing values}
+\hlstd{train} \hlkwb{<-} \hlstd{train[,} \hlopt{-}\hlkwd{which}\hlstd{(}\hlkwd{names}\hlstd{(train)} \hlopt{%in%} \hlkwd{c}\hlstd{(}
+  \hlstr{"Alley"}\hlstd{,} \hlstr{"PoolQC"}\hlstd{,} \hlstr{"Fence"}\hlstd{,}
+  \hlstr{"MiscFeature"}\hlstd{,} \hlstr{"FireplaceQu"}
+\hlstd{))]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train[, -which(names(train) \%in\% c("{}Alley"{}, "{}PoolQC"{}, "{}Fence"{}, : object of type 'closure' is not subsettable}}\begin{alltt}
+\hlkwd{nrow}\hlstd{(train)}
+\end{alltt}
+\begin{verbatim}
+## NULL
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Deleting rows with remaining missing values}
+\hlcom{# train_complete <- train[complete.cases(train), ]}
+\hlcom{# nrow(train_complete)}
+
+\hlcom{# Counting missing values again}
+\hlkwd{sum}\hlstd{(}\hlkwd{is.na}\hlstd{(train))} \hlopt{/} \hlstd{(}\hlkwd{nrow}\hlstd{(train)} \hlopt{*} \hlkwd{ncol}\hlstd{(train))}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in is.na(train): is.na() applied to non-(list or vector) of type 'closure'}}\begin{verbatim}
+## numeric(0)
+\end{verbatim}
+\begin{alltt}
+\hlcom{#New dimensions}
+\hlkwd{dim}\hlstd{(train)}
+\end{alltt}
+\begin{verbatim}
+## NULL
+\end{verbatim}
+\begin{alltt}
+\hlcom{#### Dummies ####}
+
+\hlcom{# dummifying Categorical(Factor) columns}
+\hlstd{t} \hlkwb{<-} \hlkwd{dummyVars}\hlstd{(}\hlstr{"~."}\hlstd{,} \hlkwc{data} \hlstd{= train,} \hlkwc{drop2nd} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in data[, vars, drop = FALSE]: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlstd{train} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwd{predict}\hlstd{(t,} \hlkwc{newdata} \hlstd{= train))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in UseMethod("{}predict"{}): no applicable method for 'predict' applied to an object of class "{}function"{}}}\begin{alltt}
+\hlkwd{sum}\hlstd{(train}\hlopt{$}\hlstd{SalePrice} \hlopt{!=} \hlstd{train_original}\hlopt{$}\hlstd{SalePrice)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train\$SalePrice: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlcom{#### Feature Selection ####}
+
+\hlcom{# creating new feature adding the total area of the house}
+\hlstd{train} \hlkwb{<-} \hlstd{train} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}
+    \hlkwc{TotalSF} \hlstd{= TotalBsmtSF} \hlopt{+} \hlstd{X1stFlrSF} \hlopt{+} \hlstd{X2ndFlrSF,}
+    \hlkwc{TotalBsmtSF} \hlstd{=} \hlkwa{NULL}\hlstd{,} \hlkwc{X1stFlrSF} \hlstd{=} \hlkwa{NULL}\hlstd{,} \hlkwc{X2ndFlrSF} \hlstd{=} \hlkwa{NULL}
+  \hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in UseMethod("{}mutate\_"{}): no applicable method for 'mutate\_' applied to an object of class "{}function"{}}}\begin{alltt}
+\hlstd{train} \hlkwb{<-} \hlstd{train[ ,} \hlopt{-}\hlkwd{which}\hlstd{(}\hlkwd{names}\hlstd{(train)} \hlopt{%in%} \hlkwd{c}\hlstd{(}\hlstr{"BsmtFinSF1"}\hlstd{,}\hlstr{"BsmtFinSF2"}\hlstd{,} \hlstr{"BsmtUnfSF"}\hlstd{))]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train[, -which(names(train) \%in\% c("{}BsmtFinSF1"{}, "{}BsmtFinSF2"{}, : object of type 'closure' is not subsettable}}\begin{alltt}
+\hlcom{# Running a preliminar multiple linear model}
+\hlcom{# to evaluate the relevance of all variables}
+\hlstd{model}\hlkwb{<-} \hlkwd{lm}\hlstd{(SalePrice} \hlopt{~} \hlstd{.,}  \hlkwc{data} \hlstd{= train)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in terms.formula(formula, data = data): 'data' argument is of the wrong type}}\begin{alltt}
+\hlkwd{summary}\hlstd{(model)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in summary(model): object 'model' not found}}\begin{alltt}
+\hlcom{#Selecting all variables with P value < 0.04}
+\hlstd{tm} \hlkwb{<-} \hlkwd{tidy}\hlstd{(model)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in tidy(model): object 'model' not found}}\begin{alltt}
+\hlcom{# visualise dataframe of the model}
+\hlcom{# (using non scientific notation of numbers)}
+\hlkwd{options}\hlstd{(}\hlkwc{scipen} \hlstd{=} \hlnum{999}\hlstd{)}
+\hlstd{train_rel} \hlkwb{<-} \hlstd{tm}\hlopt{$}\hlstd{term[tm}\hlopt{$}\hlstd{p.value} \hlopt{<} \hlnum{0.05}\hlstd{]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'tm' not found}}\begin{alltt}
+\hlcom{#obtaining a data frame with the column names}
+\hlcom{# that match the previous condition}
+\hlstd{train_rel} \hlkwb{<-} \hlstd{train} \hlopt{%>%}
+    \hlkwd{select}\hlstd{(train_rel)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in UseMethod("{}select\_"{}): no applicable method for 'select\_' applied to an object of class "{}function"{}}}\begin{alltt}
+\hlcom{# adding Saleprice to new data set}
+\hlstd{train_rel[}\hlstr{"SalePrice"}\hlstd{]} \hlkwb{<-} \hlstd{train}\hlopt{$}\hlstd{SalePrice}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in train\$SalePrice: object of type 'closure' is not subsettable}}\begin{alltt}
+\hlcom{# running a nwe lm including only features with p-value smaller than 0.05}
+\hlkwd{summary}\hlstd{(}\hlkwd{lm}\hlstd{(SalePrice} \hlopt{~} \hlstd{.,} \hlkwc{data} \hlstd{= train_rel))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'train\_rel' not found}}\begin{alltt}
+\hlstd{tm} \hlopt{%>%} \hlkwd{arrange}\hlstd{(tm}\hlopt{$}\hlstd{p.value)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(lhs, parent, parent): object 'tm' not found}}\begin{alltt}
+\hlcom{# Top p values ####}
+
+
+
+
+\hlcom{#### Data Visualization ####}
+
+\hlcom{# visualizing lineal model}
+\hlcom{# model1 <- lm(SalePrice ~ ., data = train_rel)}
+\hlcom{# plot(model1)}
+
+
+\hlcom{# drawing a historgram of SalePrice}
+\hlkwd{hist}\hlstd{(train_rel}\hlopt{$}\hlstd{SalePrice,} \hlkwc{probability} \hlstd{= F,} \hlkwc{breaks} \hlstd{=} \hlnum{50}\hlstd{,} \hlkwc{main} \hlstd{=} \hlstr{"Sale price hist"}\hlstd{,}
+     \hlkwc{xlab} \hlstd{=} \hlstr{"sale Price"}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"skyblue"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in hist(train\_rel\$SalePrice, probability = F, breaks = 50, main = "{}Sale price hist"{}, : object 'train\_rel' not found}}\begin{alltt}
+\hlcom{# evaluate relevant variables and plot with and without outliers}
+\hlkwd{qplot}\hlstd{(train_rel}\hlopt{$}\hlstd{LotArea, train_rel}\hlopt{$}\hlstd{SalePrice,} \hlkwc{main} \hlstd{=} \hlstr{"With Outliers"}\hlstd{,}\hlkwc{xlab} \hlstd{=} \hlstr{"Lot Area"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Sale Price"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in FUN(X[[i]], ...): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{# Deleting outliers}
+\hlcom{# train_rel <- train_rel[-which(train_rel$LotArea > 30000),]}
+
+\hlcom{#plot without outliers}
+\hlkwd{qplot}\hlstd{(train_rel}\hlopt{$}\hlstd{LotArea, train_rel}\hlopt{$}\hlstd{SalePrice,} \hlkwc{main} \hlstd{=} \hlstr{"Without Outliers"}\hlstd{,}\hlkwc{xlab} \hlstd{=} \hlstr{"Lot Area"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Sale Price"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in FUN(X[[i]], ...): object 'train\_rel' not found}}\end{kframe}
+
+{\centering \includegraphics[width=.6\linewidth]{figure/Data-Cleaning-and-EDA-Rnwauto-report-1} 
+
+}
+
+
+\begin{kframe}\begin{alltt}
+\hlcom{# Evaluating the distribution}
+\hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x} \hlstd{= SalePrice,} \hlkwc{fill} \hlstd{= ..count..))} \hlopt{+}
+    \hlkwd{geom_histogram}\hlstd{(}\hlkwc{binwidth} \hlstd{=} \hlnum{5000}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Figure 1 Histogram of SalePrice"}\hlstd{)} \hlopt{+}
+    \hlkwd{ylab}\hlstd{(}\hlstr{"Count of houses"}\hlstd{)} \hlopt{+}
+    \hlkwd{xlab}\hlstd{(}\hlstr{"Housing Price"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.5}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, fill = ..count..)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{#log term of SalePrice sinse the data is skewed to the left}
+\hlstd{train_rel}\hlopt{$}\hlstd{SalePrice} \hlkwb{<-} \hlkwd{log}\hlstd{(train_rel}\hlopt{$}\hlstd{SalePrice)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{# re-evaluating the distribution}
+\hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x} \hlstd{= SalePrice,} \hlkwc{fill} \hlstd{= ..count..))} \hlopt{+}
+    \hlkwd{geom_histogram}\hlstd{(}\hlkwc{binwidth} \hlstd{=} \hlnum{0.05}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Figure 2 Histogram of log SalePrice"}\hlstd{)} \hlopt{+}
+    \hlkwd{ylab}\hlstd{(}\hlstr{"Count of houses"}\hlstd{)} \hlopt{+}
+    \hlkwd{xlab}\hlstd{(}\hlstr{"Housing Price normalized"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.5}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, fill = ..count..)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{# Plotting Sale price compared to lotArea}
+\hlstd{plot_1} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{= SalePrice,} \hlkwc{y} \hlstd{= LotArea))} \hlopt{+}
+    \hlkwd{geom_point}\hlstd{()}\hlopt{+}
+    \hlkwd{geom_smooth}\hlstd{(}\hlkwc{method}\hlstd{=lm ,} \hlkwc{color}\hlstd{=}\hlstr{"blue"}\hlstd{,} \hlkwc{se}\hlstd{=}\hlnum{FALSE}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Scatterplot of Sale Price vs Lot Area"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.4}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, y = LotArea)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{# Plotting Sale price compared to Year Built}
+\hlstd{plot_2} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{= SalePrice,} \hlkwc{y} \hlstd{= YearBuilt))} \hlopt{+}
+    \hlkwd{geom_point}\hlstd{()}\hlopt{+}
+    \hlkwd{geom_smooth}\hlstd{(}\hlkwc{method}\hlstd{=lm ,} \hlkwc{color}\hlstd{=}\hlstr{"blue"}\hlstd{,} \hlkwc{se}\hlstd{=}\hlnum{FALSE}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Scatterplot of Sale Price vs Year Built"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.4}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, y = YearBuilt)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{# Plotting Sale price compared to Wood Deck SF}
+\hlstd{plot_3} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{= SalePrice,} \hlkwc{y} \hlstd{= WoodDeckSF))} \hlopt{+}
+    \hlkwd{geom_point}\hlstd{()}\hlopt{+}
+    \hlkwd{geom_smooth}\hlstd{(}\hlkwc{method}\hlstd{=lm ,} \hlkwc{color}\hlstd{=}\hlstr{"blue"}\hlstd{,} \hlkwc{se}\hlstd{=}\hlnum{FALSE}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Scatterplot of Sale Price vs Wood Deck SF"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.4}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, y = WoodDeckSF)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{#  Plotting Sale price compared to Total Square feet}
+\hlstd{plot_4} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{= SalePrice,} \hlkwc{y} \hlstd{= TotalSF))} \hlopt{+}
+    \hlkwd{geom_point}\hlstd{()}\hlopt{+}
+    \hlkwd{geom_smooth}\hlstd{(}\hlkwc{method}\hlstd{=lm ,} \hlkwc{color}\hlstd{=}\hlstr{"blue"}\hlstd{,} \hlkwc{se}\hlstd{=}\hlnum{FALSE}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Scatterplot of Sale Price vs Total Square feet"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.4}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, y = TotalSF)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{#  Plotting Sale price compared to Above grade (ground) living area square fee}
+\hlstd{plot_5} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{= SalePrice,} \hlkwc{y} \hlstd{= GrLivArea))} \hlopt{+}
+    \hlkwd{geom_point}\hlstd{()}\hlopt{+}
+    \hlkwd{geom_smooth}\hlstd{(}\hlkwc{method}\hlstd{=lm ,} \hlkwc{color}\hlstd{=}\hlstr{"blue"}\hlstd{,} \hlkwc{se}\hlstd{=}\hlnum{FALSE}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Scatterplot of Sale Price vs Above grade (ground) living area square feet"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.4}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, y = GrLivArea)): object 'train\_rel' not found}}\begin{alltt}
+\hlcom{#  Plotting Sale price compared to Masonry veneer area in square feet}
+\hlstd{plot_6} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(train_rel,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{= SalePrice,} \hlkwc{y} \hlstd{= MasVnrArea))} \hlopt{+}
+    \hlkwd{geom_point}\hlstd{()}\hlopt{+}
+    \hlkwd{geom_smooth}\hlstd{(}\hlkwc{method}\hlstd{=lm ,} \hlkwc{color}\hlstd{=}\hlstr{"blue"}\hlstd{,} \hlkwc{se}\hlstd{=}\hlnum{FALSE}\hlstd{)} \hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlstr{"Scatterplot of Sale Price vs Masonry veneer area in square feet"}\hlstd{)} \hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{hjust} \hlstd{=} \hlnum{0.4}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(train\_rel, aes(x = SalePrice, y = MasVnrArea)): object 'train\_rel' not found}}\begin{alltt}
+\hlkwd{grid.arrange}\hlstd{(plot_1, plot_2,plot_3,plot_4)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrangeGrob(...): object 'plot\_1' not found}}\begin{alltt}
+\hlkwd{grid.arrange}\hlstd{(plot_3,plot_4, plot_5,plot_6)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in arrangeGrob(...): object 'plot\_3' not found}}\begin{alltt}
+\hlcom{# Showing the corelation between some numeric variables}
+\hlstd{c1} \hlkwb{<-} \hlstd{train} \hlopt{%>%} \hlkwd{select}\hlstd{(}\hlstr{"GarageYrBlt"}\hlstd{,}\hlstr{"LotArea"}\hlstd{,} \hlstr{"YearBuilt"}\hlstd{,} \hlstr{"WoodDeckSF"}\hlstd{,} \hlstr{"TotalSF"}\hlstd{,}
+                       \hlstr{"GrLivArea"}\hlstd{,} \hlstr{"MasVnrArea"}\hlstd{,}\hlstr{'OverallQual'}\hlstd{,}\hlstr{'OverallCond'}\hlstd{,}\hlstr{'YearBuilt'}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in UseMethod("{}select\_"{}): no applicable method for 'select\_' applied to an object of class "{}function"{}}}\begin{alltt}
+\hlkwd{corrplot}\hlstd{(}\hlkwd{cor}\hlstd{(c1),} \hlkwc{method} \hlstd{=} \hlstr{'number'}\hlstd{,} \hlkwc{tl.col} \hlstd{=} \hlstr{"blue"} \hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'c1' not found}}\begin{alltt}
+\hlstd{c2} \hlkwb{<-} \hlstd{train} \hlopt{%>%}  \hlkwd{select}\hlstd{(}\hlstr{"RoofMatlClyTile"}\hlstd{,} \hlstr{"Condition2PosN"}\hlstd{,} \hlstr{"OverallCond"}\hlstd{,} \hlstr{"BsmtExposureGd"}\hlstd{,}
+                     \hlstr{"LotArea"}\hlstd{,} \hlstr{"GrLivArea"}\hlstd{,} \hlstr{"OverallQual"}\hlstd{,} \hlstr{"KitchenQualEx"}\hlstd{,} \hlstr{"LandSlopeMod"}\hlstd{,}
+                     \hlstr{"PoolArea"}\hlstd{,} \hlstr{"SalePrice"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in UseMethod("{}select\_"{}): no applicable method for 'select\_' applied to an object of class "{}function"{}}}\begin{alltt}
+\hlkwd{corrplot}\hlstd{(}\hlkwd{cor}\hlstd{(c2),} \hlkwc{method} \hlstd{=} \hlstr{"number"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'c2' not found}}\begin{alltt}
+\hlkwd{print}\hlstd{(}\hlkwd{cor}\hlstd{(c2))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'c2' not found}}\begin{alltt}
+\hlcom{# writing file with cleaned dummified data}
+\hlkwd{write.csv}\hlstd{(train_rel,} \hlstr{"train_relevant"}\hlstd{,} \hlkwc{row.names} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'train\_rel' not found}}\end{kframe}
+\end{knitrout}
+
+The R session information (including the OS info, R version and all
+packages used):
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sessionInfo}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## Running under: Windows 10 x64 (build 17763)
+## 
+## Matrix products: default
+## 
+## Random number generation:
+##  RNG:     Mersenne-Twister 
+##  Normal:  Inversion 
+##  Sample:  Rounding 
+##  
+## locale:
+## [1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252   
+## [3] LC_MONETARY=English_United States.1252 LC_NUMERIC=C                          
+## [5] LC_TIME=English_United States.1252    
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] naniar_0.4.2    gridExtra_2.3   broom_0.5.2     caret_6.0-84    lattice_0.20-38
+##  [6] corrplot_0.84   class_7.3-15    dummies_1.5.6   forcats_0.4.0   stringr_1.4.0  
+## [11] dplyr_0.8.1     purrr_0.3.2     readr_1.3.1     tidyr_0.8.3     tibble_2.1.1   
+## [16] tidyverse_1.2.1 ggplot2_3.1.1   tinytex_0.14   
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.1         lubridate_1.7.4    assertthat_0.2.1   ipred_0.9-9       
+##  [5] foreach_1.4.4      R6_2.4.0           cellranger_1.1.0   plyr_1.8.4        
+##  [9] backports_1.1.4    visdat_0.5.3       stats4_3.6.0       evaluate_0.13     
+## [13] httr_1.4.0         highr_0.8          pillar_1.4.0       rlang_0.3.4       
+## [17] lazyeval_0.2.2     readxl_1.3.1       data.table_1.12.2  rstudioapi_0.10   
+## [21] rpart_4.1-15       Matrix_1.2-17      splines_3.6.0      gower_0.2.1       
+## [25] munsell_0.5.0      compiler_3.6.0     modelr_0.1.4       xfun_0.7          
+## [29] pkgconfig_2.0.2    nnet_7.3-12        tidyselect_0.2.5   prodlim_2018.04.18
+## [33] codetools_0.2-16   crayon_1.3.4       withr_2.1.2        ModelMetrics_1.2.2
+## [37] MASS_7.3-51.4      recipes_0.1.5      grid_3.6.0         nlme_3.1-139      
+## [41] jsonlite_1.6       gtable_0.3.0       magrittr_1.5       scales_1.0.0      
+## [45] cli_1.1.0          stringi_1.4.3      reshape2_1.4.3     timeDate_3043.102 
+## [49] xml2_1.2.0         generics_0.0.2     lava_1.6.5         iterators_1.0.10  
+## [53] tools_3.6.0        glue_1.3.1         hms_0.4.2          survival_2.44-1.1 
+## [57] colorspace_1.4-1   rvest_0.3.4        knitr_1.23         haven_2.1.0
+\end{verbatim}
+\begin{alltt}
+\hlkwd{Sys.time}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] "2019-07-30 11:30:54 EDT"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\end{document}
